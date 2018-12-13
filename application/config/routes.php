@@ -53,6 +53,9 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['api/user/login'] = 'api/users/login';
+$route['v1/user/login'] = 'api/users/login';
 
-$route['api/user/all'] = 'api/users/all';
+$route['v1/users']['GET'] = 'api/users/users';
+$route['v1/users/(:num)']['GET'] = 'api/users/users/$1';
+$route['v1/users']['POST'] = 'api/users/users';
+$route['v1/users/(:num)']['PUT'] = 'api/users/users/$1';

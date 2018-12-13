@@ -4,6 +4,31 @@
 class User_model extends My_Model
 {
 
+
+    public function users(){
+        $this->apply_filters();
+        $this->response = $this->db->get($this->tables['users']);
+        return $this;
+    }
+
+    public function user($id){
+        $this->limit(1);
+        $this->order_by($this->tables['users'].'.id', 'desc');
+        $this->where($this->tables['users'].'.id',$id);
+        $this->users();
+        return $this;
+    }
+
+    public function search($query){
+        $this->like('nombre',$query);
+        $this->like('paterno', $query);
+        $this->like('materno', $query);
+        $this->like('email', $query);
+        $this->like('usuario', $query);
+    }
+
+
+
     public function login($username, $password)
     {
         if(empty($username) || empty($password))
@@ -62,5 +87,9 @@ class User_model extends My_Model
         {
             return FALSE;
         }
+    }
+
+    private function hash_password($password){
+
     }
 }
