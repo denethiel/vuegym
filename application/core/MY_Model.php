@@ -90,6 +90,40 @@ class My_Model extends CI_Model
 
     }
 
+    /* SHARED FUNCTIONS */
+    public function add_to_group($group_id, $user_id )
+    {
+        return $this->db->insert($this->tables['users_groups'],
+                                 array(
+                                    $this->join['users'] => (float) $user_id,
+                                    $this->join['groups'] => (float) $group_id
+                                ));
+    }
+
+    public function remove_from_group($group_id = FALSE, $user_id = FALSE)
+    {
+        if(empty($user_id))
+        {
+            return FALSE;
+        }
+
+        if(!empty($group_id))
+        {
+            $this->db->delete($this->tables['users_groups'],
+                                array($this->join['groups'] => (float) $user_id,
+                                      $this->join['users'] => (float) $group_id
+                              ));
+            $return = TRUE;
+        }else
+        {
+            $return = $this->db->delete($this->tables['users_groups'], array(
+                                        $this->join['users'] => (float) $user_id
+            ));
+        }
+
+        return $return;
+    }
+
     public function apply_filters(){
         if(isset($this->_select) && !empty($this->_select))
 		{
