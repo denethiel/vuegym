@@ -64,10 +64,10 @@ class Users extends REST_Controller
                 'email' => $this->input->post('email', TRUE),
                 'clave' => $this->input->post('clave', TRUE),
                 'usuario' => $this->input->post('usuario', TRUE),
-                'fecha_creacion' => time(),
-                'fecha_actualizacion' => time()
+                'fecha_creacion' =>  date ("Y-m-d H:i:s"),
+                'fecha_actualizacion' =>  date ("Y-m-d H:i:s")
             ];
-            $output = $this->UserModel->create_user($insert_data, $this->input->post('id_grupo'));
+            $output = $this->UserModel->create($insert_data, $this->input->post('id_grupo'));
 
             if($output > 0 AND !empty($output))
             {
@@ -81,7 +81,7 @@ class Users extends REST_Controller
             {
                 $message = [
                     'status' => FALSE,
-                    'message' => $this->UserModel->error()
+                    'message' => $this->UserModel->errors()
                 ];
                 $this->response($message, REST_Controller::HTTP_NOT_FOUND);
             }
@@ -96,6 +96,44 @@ class Users extends REST_Controller
             $this->response(['status' => FALSE, 'message' => $is_valid_token['message'] ], REST_Controller::HTTP_NOT_FOUND);
         }
         
+
+    }
+
+    public function deleteUser_delete($id){
+        header("Access-Control-Allow-Origin: *");
+    
+        // Load Authorization Token Library
+        $this->load->library('Authorization_Token');
+        /**
+         * User Token Validation
+         */
+        $is_valid_token = $this->authorization_token->validateToken();
+        if (!empty($is_valid_token) AND $is_valid_token['status'] === TRUE)
+        {
+            $id = $this->security->xss_clean($id);
+            if(empty($id) AND !is_numeric($id)){
+                $this->response(['status' => FALSE, 'message' => 'Invalid Article ID'], REST_Controller::HTTP_NOT_FOUND);
+            }else
+            {
+                if($this->UserModel->delete($id)){
+                    $message = [
+                        'status' => true,
+                        'message' => $this->UserModel->messages()
+                    ];
+                    $this->response($message, REST_Controller::HTTP_OK);
+                }else
+                {
+                    $message = [
+                        'status' => true,
+                        'message' => $this->UserModel->errors()
+                    ];
+
+                    $this->response($message, REST_Controller::HTTP_NOT_FOUND);
+                }
+            }
+        }else {
+            $this->response(['status' => FALSE, 'message' => $is_valid_token['message'] ], REST_Controller::HTTP_NOT_FOUND);
+        }
 
     }
 
@@ -157,6 +195,14 @@ class Users extends REST_Controller
                 }
 
                 
+            }else{
+                $message = array(
+                    'status' => false,
+                    'error' => $this->form_validation->error_array(),
+                    'message' => validation_errors()
+                );
+    
+                $this->response($message, REST_Controller::HTTP_NOT_FOUND);
             }
 
             $this->response($query, REST_Controller::HTTP_OK);
@@ -182,6 +228,8 @@ class Users extends REST_Controller
         if (!empty($is_valid_token) AND $is_valid_token['status'] === TRUE)
         {
             $search = $this->input->get('s');
+            $limit = $this->input->get('limit');
+            $offset = $this->input->get('offset');
             if($id != NULL AND $search != null){
                 $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST);
             }
@@ -190,6 +238,10 @@ class Users extends REST_Controller
             }else{
                 if($search != null){
                     $this->UserModel->search($search);
+                }
+                if($limit != NULL AND $offset != NULL){
+                    $this->UserModel->limit($limit);
+                    $this->UserModel->offset($offset);
                 }
                 $query = $this->UserModel->users()->result();
                 

@@ -27,11 +27,11 @@ class User_model extends My_Model
         $this->like('usuario', $query);
     }
 
-    public function create_user($insert_data, $group_id){
+    public function create($insert_data, $group_id){
         
         $password = $insert_data['clave'];
         $password2 = $this->hash_password('usuario');
-        $insert_data['clave'] = password_hash($password,PASSWORD_BCRYPT);
+        $insert_data['clave'] = $this->hash_password($password);
         var_dump($insert_data);
         die();
         $this->db->insert($this->tables['users'], $insert_data);
@@ -45,7 +45,7 @@ class User_model extends My_Model
         return $user_id;
     }
 
-    public function update_user($id, $data)
+    public function update($id, $data)
     {
         $user = $this->user($id)->row();
         $this->db->trans_begin();
@@ -63,7 +63,7 @@ class User_model extends My_Model
         {
             if(!empty($data['clave']))
             {
-                $data['clave'] = password_hash($data['clave'],PASSWORD_BCRYPT);
+                $data['clave'] = $this->hash_password($data['clave']);
             }else
             {
                 unset($data['clave']);
@@ -82,6 +82,27 @@ class User_model extends My_Model
 
         $this->db->trans_commit();
         $this->set_message('Informacion de la cuenta actualizada con éxito');
+
+        return TRUE;
+    }
+
+    public function delete($id){
+        $this->db->trans_begin();
+
+        $this->remove_from_group(NULL, $id);
+
+        $this->delete($this->tables['users'], array('id' => $id));
+
+        if($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            $this->set_error('No se ha podido eliminar el usuario');
+            return FALSE;
+        }
+
+        $this->db->trans_commit();
+
+        $this->set_message('Usuario eliminado');
 
         return TRUE;
     }
@@ -154,9 +175,5 @@ class User_model extends My_Model
         {
             return FALSE;
         }
-    }
-
-    private function hash_password($password){
-
     }
 }

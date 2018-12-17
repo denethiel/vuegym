@@ -91,6 +91,25 @@ class My_Model extends CI_Model
     }
 
     /* SHARED FUNCTIONS */
+
+    protected function _filter_data($table, $data)
+    {
+        $filtered_data = array();
+        $columns = $this->db->list_fields($table);
+        //var_dump($columns);
+
+        if(is_array($data))
+        {
+            foreach($columns as $column)
+            {
+                if(array_key_exists($column, $data))
+                    $filtered_data[$column] = $data[$column];
+            }
+        }
+
+        return $filtered_data;
+
+    }
     public function add_to_group($group_id, $user_id )
     {
         return $this->db->insert($this->tables['users_groups'],
@@ -123,6 +142,13 @@ class My_Model extends CI_Model
 
         return $return;
     }
+
+    public function hash_password($password)
+    {
+        return password_hash($password,PASSWORD_DEFAULT);
+    }
+
+    /* END SHARED FUNCTIONS */
 
     public function apply_filters(){
         if(isset($this->_select) && !empty($this->_select))
