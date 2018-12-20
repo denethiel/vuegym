@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -48,15 +48,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
-*/
+ */
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+$route['translate_uri_dashes'] = false;
 
-$route['v1/users/login'] = 'api/users/login';
+// $route['v1/login']['post'] = 'api/users/login';
 
-$route['v1/users']['GET'] = 'api/users/users';
-$route['v1/users/(:num)']['GET'] = 'api/users/users/$1';
-$route['v1/users']['POST'] = 'api/users/create';
-$route['v1/users/(:num)']['PUT'] = 'api/users/users/$1';
-$route['v1/users/(:num)']['DELETE'] = 'api/users/deleteUser/$id';
+// $route['v1/users']['GET'] = 'api/users/users';
+// $route['v1/users/(:num)']['GET'] = 'api/users/users/$1';
+// $route['v1/users']['POST'] = 'api/users/create';
+// $route['v1/users/(:num)']['PUT'] = 'api/users/users/$1';
+// $route['v1/users/(:num)']['DELETE'] = 'api/users/deleteUser/$id';

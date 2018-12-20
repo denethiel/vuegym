@@ -1,54 +1,86 @@
-
+//import gym from '../axios'
+import axios from 'axios'
 
 const state = {
-    token: localStorage.getItem('token') || '',
-    status:''
+	token: localStorage.getItem('token') || '',
+	status: '',
+	user: {}
 }
 
 const getters = {
-    isAuthenticated: state => !!state.token,
-    authStatus: state => state.status
+	isLoggedIn: state => !!state.token,
+	authStatus: state => state.status
 }
 
+const api = axios.create({
+	baseUrl: 'http://localhost:8888/vuegym/v1'
+})
+
 const actions = {
-    [AUTH_REQUEST]:({commit, dispatch}, user) =>{
-        return new Promise((resolve, reject) => {
-            commit(AUTH_REQUEST)
-            axios({url:'v1/users/login',data:user,method:'POST'})
-                .then(resp =>{
-                    console.log(resp);
-                    commit(AUTH_SUCCESS, token)
-                    dispatch(USER_REQUEST)
-                    resolve(resp)
-                })
-                .catch(err => {
-                    commit(AUTH_ERROR, err)
-                    localStorage.removeItem('token')
-                    reject(err)
-                })
-        })
-    },
-    [AUTH_LOGOUT]:({commit, dispatch}) => {
-        return new Promise((resolve, reject) => {
-            commit(AUTH_LOGOUT)
-            localStorage.removeItem('token')
-            resolve()
-        })
-    }
+	login({ commit }, user) {
+		return new Promise((resolve, reject) => {
+			commit('auth_request')
+			console.log(user.usuario)
+			console.log(user.password)
+			axios({
+				method: 'POST',
+				url: 'http://localhost:8888/vuegym/api/users/login',
+				data: {
+					usuario: user.usuario,
+					password: user.password
+				},
+				headers: {
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': '*'
+				}
+			})
+				// fetch('http://localhost:8888/vuegym/api/users/login', {
+				// 	method: 'POST',
+				// 	body: JSON.stringify(user),
+				// 	headers: {
+				// 		'Content-Type': 'application/json'
+				// 	}
+				// })
+				.then(resp => {
+					console.log(resp)
+					resolve(resp)
+				})
+				.catch(err => {
+					console.log(err)
+					reject(err)
+				})
+		})
+	},
+	logout({ commit }) {
+		return new Promise(resolve => {
+			commit('logout')
+			localStorage.removeItem('token')
+			resolve()
+		})
+	}
 }
 
 const mutations = {
-    [AUTH_REQUEST]:(state) =>{
-        state.status = 'loading'
-    },
-    [AUTH_SUCCESS]:(state, token) =>{
-        state.state = 'success'
-        state.token = token
-    },
-    [AUTH_ERROR]:(state) => {
-        state.status = 'error'
-    },
-    [AUTH_LOGOUT]:(state) => {
-        state.state = ''
-    }
+	auth_request(state) {
+		state.status = 'loading'
+	},
+	auth_success(state, token, user) {
+		state.status = 'success'
+		state.token = token
+		state.user = user
+	},
+	auth_error(state) {
+		state.status = 'error'
+	},
+	logout(state) {
+		state.status = ''
+		state.token = ''
+	}
+}
+
+export default {
+	state,
+	getters,
+	actions,
+	mutations
 }

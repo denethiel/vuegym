@@ -39,15 +39,14 @@
 </template>
 
 <script>
-import HeaderAction from './HeaderAction.vue';
+import HeaderAction from './HeaderAction.vue'
 export default {
-    name:'Header',
-    components:{
-      HeaderAction
-    }
+	name: 'Header',
+	components: {
+		HeaderAction
+	}
 }
 </script>
 
 <style>
-
 </style>
