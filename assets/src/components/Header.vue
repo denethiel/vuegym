@@ -4,14 +4,14 @@
 
         <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-        <b-navbar-brand href="#">GYM Control</b-navbar-brand>
+        <b-navbar-brand to="/">GYM Control</b-navbar-brand>
 
         <b-collapse is-nav id="nav_collapse">
 
           <b-navbar-nav>
-            <b-nav-item href="#">Inicio</b-nav-item>
+            <b-nav-item to="/">Inicio</b-nav-item>
             <b-nav-item-dropdown text="Usuarios" right>
-              <b-dropdown-item href="#">Ver Usuarios</b-dropdown-item>
+              <b-dropdown-item to="Users">Ver Usuarios</b-dropdown-item>
               <b-dropdown-item href="#">Añadir Usuario</b-dropdown-item>
             </b-nav-item-dropdown>
             <b-nav-item-dropdown text="Socios" right>

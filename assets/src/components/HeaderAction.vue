@@ -15,14 +15,56 @@
                         </ul>
                     </div>
                 </b-col>
+                <b-col sm="2" md="2">
+                    <b-btn v-b-modal.loginModal>Login</b-btn>
+                </b-col>
             </b-row>
+            <!-- Modal Component -->
+            <b-modal id="loginModal" title="Iniciar Sesion" hide-footer=true>
+                <div>
+                <b-form @submit="login">
+                    <b-form-group id="username-label"
+                                  label="Nombre de Usuario"
+                                  label-for="username-input">
+                        <b-form-input id="username-input"
+                                      type="text"
+                                      v-model="form.usuario"
+                                      required
+                                      placeholder="Usuario"></b-form-input>
+                    </b-form-group>
+                    <b-form-group id="password-label"
+                                label="Contraseña"
+                                label-for="password-input">
+                                <b-form-input id="password-input"
+                                        type="password"
+                                        v-model="form.password"
+                                        required
+                                        placeholder="Contraseña"></b-form-input>
+                    </b-form-group>
+                    <b-button type="submit" variant="primary">Iniciar Sesion</b-button>
+                </b-form>
+                </div>
+            </b-modal>
         </b-container>
     </div>
 </template>
 
 <script>
 export default {
-    name:'HeaderAction'
+    name:'HeaderAction',
+    data(){
+        return {
+            form:{
+                usuario:'',
+                password:''
+            }
+        }
+    },
+    methods:{
+        login(evt){
+            evt.preventDefault();
+        }
+    }
 }
 </script>
 

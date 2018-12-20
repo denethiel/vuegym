@@ -255,7 +255,7 @@ body a, body a:hover, body a:active, body a:visited, body a:focus {
 }
 
 /* SECTIONS CSS */
-.section.wrapper{
+.section-wrapper{
     background: #fff;
     width: 100%;
     float: left;
@@ -285,9 +285,11 @@ body a, body a:hover, body a:active, body a:visited, body a:focus {
         bottom:-15px;
     }
 }
-@media only screen and (min-width: 1200px){
+
+
+@media only screen and (min-width: 768px){
     .container{
-        width: 1170px;
+        width: 750px;
     }
 }
 @media only screen and (min-width: 992px){
@@ -295,9 +297,10 @@ body a, body a:hover, body a:active, body a:visited, body a:focus {
         width: 970px;
     }
 }
-@media only screen and (min-width: 768px){
+
+@media only screen and (min-width: 1200px){
     .container{
-        width: 750px;
+        width: 1170px;
     }
 }
 
@@ -330,6 +333,9 @@ body a, body a:hover, body a:active, body a:visited, body a:focus {
                 border-radius: 3px;
                 background: #d21346;
                 .transition-properties(all ease-in-out 0.3s);
+            }
+            &:active{
+                
             }
         }
     }
