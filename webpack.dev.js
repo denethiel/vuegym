@@ -8,11 +8,9 @@ module.exports = merge(common, {
 	plugins: [
 		new BrowserSyncPlugin({
 			proxy: {
-				target: 'http://localhost:8888/vuegym/'
+				target: 'http://localhost/vuegym/'
 			},
-			files: [
-				'**/*.php'
-			],
+			files: ['**/*.php'],
 			cors: true,
 			reloadDelay: 0
 		})

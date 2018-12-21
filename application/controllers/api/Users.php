@@ -298,8 +298,12 @@ class Users extends REST_Controller
 
     public function login_post()
     {
-        header("Access-Control-Allow-Origin: *");
-        //$_POST = $this->security->xss_clean($_POST);
+        header("Access-Control-Allow-Origin:*");
+        $_POST = $this->security->xss_clean($_POST);
+        // $_POST['usuario'] = $this->post('usuario');
+        // $_POST['password'] = $this->post('password');
+        $content_type = $this->input->get_request_header('Content-Type', TRUE);
+        $_POST = json_decode(file_get_contents("php://input"), true);
 
         $this->form_validation->set_rules('usuario', 'Usuario', 'required');
         $this->form_validation->set_rules('password', 'Contraseña', 'required');
@@ -307,6 +311,7 @@ class Users extends REST_Controller
         if ($this->form_validation->run() === false) {
             $message = array(
                 'status' => false,
+                'type' => $content_type,
                 'error' => $this->form_validation->error_array(),
                 'message' => validation_errors()
             );
@@ -322,13 +327,14 @@ class Users extends REST_Controller
                 $token_data['email'] = $output->email;
                 $token_data['time'] = time();
 
-                //$user_token = $this->authorization_token->generateToken($token_data);
+                $user_token = $this->authorization_token->generateToken($token_data);
 
                 $return_data = [
                     'user_id' => $output->id,
                     'usuario' => $output->usuario,
                     'email' => $output->email,
-                    'token' => ''//$user_token,
+                    'token' => $user_token,
+                    'type' => $content_type
                 ];
 
                 $message = [

@@ -24,22 +24,20 @@ const actions = {
 			console.log(user.password)
 			axios({
 				method: 'POST',
-				url: 'http://localhost:8888/vuegym/api/users/login',
-				data: {
-					usuario: user.usuario,
-					password: user.password
-				},
+				url: 'http://localhost/vuegym/api/users/login',
+				//url: "http://localhost/ci-rest-jwt/api/auth/login",
+				data: user,
 				headers: {
-					'Content-Type': 'application/json',
-					'Access-Control-Allow-Origin': '*'
+					// "Content-Type": "application/json",
+					// "Access-Control-Allow-Origin": "*"
 				}
 			})
-				// fetch('http://localhost:8888/vuegym/api/users/login', {
-				// 	method: 'POST',
-				// 	body: JSON.stringify(user),
-				// 	headers: {
-				// 		'Content-Type': 'application/json'
-				// 	}
+				// fetch("http://localhost/vuegym/api/users/login", {
+				//   method: "POST",
+				//   body: JSON.stringify(user),
+				//   headers: {
+				//     "Content-Type": "application/json"
+				//   }
 				// })
 				.then(resp => {
 					console.log(resp)
